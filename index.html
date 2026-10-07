@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قلوط مركزي</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --accent: #ec4899;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(236, 72, 153, 0.3);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        input {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .player-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .player-input-row input {
+            flex: 1;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            padding: 10px 15px;
+            margin-top: 0;
+            width: auto;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #334155;
+            margin-top: 5px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .scores-table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .scores-table th, .scores-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+        }
+
+        .scores-table th {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .total-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>قلوط مركزي</h1>
+        <p style="color: var(--text-muted); margin: 5px 0 0 0;">لعبة سكرو - يحيى عزام</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('individual')">فردي</button>
+        <button class="tab-btn" onclick="switchTab('duo')">زوجي</button>
+    </div>
+
+    <!-- قسم الفردي -->
+    <div id="individual" class="tab-content active">
+        <div class="card">
+            <h2>إعدادات اللاعبين (فردي)</h2>
+            <div id="ind-inputs-list">
+                <div class="player-input-row">
+                    <input type="text" placeholder="اسم اللاعب 1" class="ind-name-input">
+                </div>
+                <div class="player-input-row">
+                    <input type="text" placeholder="اسم اللاعب 2" class="ind-name-input">
+                </div>
+            </div>
+            <button type="button" class="btn-secondary" onclick="addPlayerInput('ind')">+ إضافة لاعب آخر</button>
+        </div>
+
+        <div class="card">
+            <h2>تسجيل نقاط الجولة</h2>
+            <div id="ind-round-inputs">
+                <!-- سيتم تعبئتها تلقائياً حسب اللاعبين -->
+            </div>
+            <button onclick="addIndRound()">حفظ وإضافة الجولة</button>
+        </div>
+
+        <div class="card">
+            <h2>النتائج والمجاميع</h2>
+            <div id="ind-results-container">
+                <p style="text-align: center; color: var(--text-muted);">لم يتم إضافة جولات بعد</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم الزوجي -->
+    <div id="duo" class="tab-content">
+        <div class="card">
+            <h2>إعدادات الثنائيات (زوجي)</h2>
+            <div id="duo-inputs-list">
+                <div class="player-input-row">
+                    <input type="text" placeholder="اسم الفريق 1 (مثال: أحمد ومحمد)" class="duo-name-input">
+                </div>
+                <div class="player-input-row">
+                    <input type="text" placeholder="اسم الفريق 2 (مثال: علي وخالد)" class="duo-name-input">
+                </div>
+            </div>
+            <button type="button" class="btn-secondary" onclick="addPlayerInput('duo')">+ إضافة فريق آخر</button>
+        </div>
+
+        <div class="card">
+            <h2>تسجيل نقاط الجولة للثنائيات</h2>
+            <div id="duo-round-inputs">
+                <!-- سيتم تعبئتها تلقائياً حسب الفرق -->
+            </div>
+            <button onclick="addDuoRound()">حفظ وإضافة الجولة للزوجي</button>
+        </div>
+
+        <div class="card">
+            <h2>النتائج والمجاميع للزوجي</h2>
+            <div id="duo-results-container">
+                <p style="text-align: center; color: var(--text-muted);">لم يتم إضافة جولات بعد</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (tabName === 'individual') {
+                document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('individual').classList.add('active');
+                updateRoundInputs('ind');
+            } else {
+                document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('duo').classList.add('active');
+                updateRoundInputs('duo');
+            }
+        }
+
+        function addPlayerInput(type) {
+            const list = document.getElementById(`${type}-inputs-list`);
+            const count = list.children.length + 1;
+            const row = document.createElement('div');
+            row.className = 'player-input-row';
+            
+            const placeholder = type === 'ind' ? `اسم اللاعب ${count}` : `اسم الفريق ${count}`;
+            const className = type === 'ind' ? 'ind-name-input' : 'duo-name-input';
+
+            row.innerHTML = `
+                <input type="text" placeholder="${placeholder}" class="${className}">
+                <button type="button" class="btn-danger" onclick="this.parentElement.remove(); updateRoundInputs('${type}');">حذف</button>
+            `;
+            list.appendChild(row);
+            updateRoundInputs(type);
+        }
+
+        function updateRoundInputs(type) {
+            const nameInputs = document.querySelectorAll(`.${type}-name-input`);
+            const roundContainer = document.getElementById(`${type}-round-inputs`);
+            roundContainer.innerHTML = '';
+
+            nameInputs.forEach((input, index) => {
+                const name = input.value.trim() || `${type === 'ind' ? 'لاعب' : 'فريق'} ${index + 1}`;
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.innerHTML = `
+                    <label>نقاط ${name}:</label>
+                    <input type="number" class="${type}-score-input" placeholder="أدخل النقاط...">
+                `;
+                roundContainer.appendChild(div);
+            });
+        }
+
+        // تحديث حقول النقاط أثناء كتابة الأسماء
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('ind-name-input')) updateRoundInputs('ind');
+            if (e.target.classList.contains('duo-name-input')) updateRoundInputs('duo');
+        });
+
+        // تهيئة أولية لحقول الجولات
+        window.onload = function() {
+            updateRoundInputs('ind');
+            updateRoundInputs('duo');
+        };
+
+        // إدارة الفردي
+        let indData = { rounds: [] };
+        function addIndRound() {
+            const nameInputs = document.querySelectorAll('.ind-name-input');
+            const scoreInputs = document.querySelectorAll('.ind-score-input');
+            
+            let players = [];
+            let scores = [];
+
+            nameInputs.forEach((input, i) => {
+                players.push(input.value.trim() || `لاعب ${i + 1}`);
+                scores.push(parseFloat(scoreInputs[i].value) || 0);
+            });
+
+            indData.players = players;
+            indData.rounds.push(scores);
+
+            // تفريغ خانات النقاط للجولة الجديدة
+            scoreInputs.forEach(input => input.value = '');
+            renderIndResults();
+        }
+
+        function renderIndResults() {
+            const container = document.getElementById('ind-results-container');
+            if (indData.rounds.length === 0) return;
+
+            let totals = new Array(indData.players.length).fill(0);
+
+            let html = `<table class="scores-table"><thead><tr><th>الجولة</th>`;
+            indData.players.forEach(p => html += `<th>${p}</th>`);
+            html += `</tr></thead><tbody>`;
+
+            indData.rounds.forEach((round, index) => {
+                html += `<tr><td>جولة ${index + 1}</td>`;
+                round.forEach((score, pIndex) => {
+                    totals[pIndex] += score;
+                    html += `<td>${score}</td>`;
+                });
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table>`;
+            html += `<div class="total-score">المجاميع النهائية:<br>` + 
+                indData.players.map((p, i) => `${p}: ${totals[i]}`).join(' | ') + 
+                `</div>`;
+
+            container.innerHTML = html;
+        }
+
+        // إدارة الزوجي
+        let duoData = { rounds: [] };
+        function addDuoRound() {
+            const nameInputs = document.querySelectorAll('.duo-name-input');
+            const scoreInputs = document.querySelectorAll('.duo-score-input');
+            
+            let teams = [];
+            let scores = [];
+
+            nameInputs.forEach((input, i) => {
+                teams.push(input.value.trim() || `فريق ${i + 1}`);
+                scores.push(parseFloat(scoreInputs[i].value) || 0);
+            });
+
+            duoData.teams = teams;
+            duoData.rounds.push(scores);
+
+            // تفريغ خانات النقاط للجولة الجديدة
+            scoreInputs.forEach(input => input.value = '');
+            renderDuoResults();
+        }
+
+        function renderDuoResults() {
+            const container = document.getElementById('duo-results-container');
+            if (duoData.rounds.length === 0) return;
+
+            let totals = new Array(duoData.teams.length).fill(0);
+
+            let html = `<table class="scores-table"><thead><tr><th>الجولة</th>`;
+            duoData.teams.forEach(t => html += `<th>${t}</th>`);
+            html += `</tr></thead><tbody>`;
+
+            duoData.rounds.forEach((round, index) => {
+                html += `<tr><td>جولة ${index + 1}</td>`;
+                round.forEach((score, tIndex) => {
+                    totals[tIndex] += score;
+                    html += `<td>${score}</td>`;
+                });
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table>`;
+            html += `<div class="total-score">المجاميع النهائية للثنائيات:<br>` + 
+                duoData.teams.map((t, i) => `${t}: ${totals[i]}`).join(' | ') + 
+                `</div>`;
+
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
